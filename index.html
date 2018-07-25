@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+</head>
+
+<body>
+  <h1>Weather to CSV</h1>
+
+  <div>
+    API-KEY <input id='api-key-config'></input>
+</div>
+
+  <div>
+    Latitude <input id='latitude-config' size=7></input>
+    Longitude <input id='longitude-config' size=7></input>
+  </div>
+
+  <div>
+    Day <input id='start-day-config' size=7></input>
+    Month <input id='start-month-config' size=7></input>
+    Year <input id='start-year-config' size=7></input>
+  </div> 
+  
+  <div>
+  Number of Days: <input id='number-of-days-config' size=4></input>
+  </div>
+  <button id='submit-button'>Submit</button>
+
+
+  <script>
+    window.$ = window.jQuery = require('./jquery.js');
+    require('./app.js');
+  </script>
+</body>
+
+</html>
