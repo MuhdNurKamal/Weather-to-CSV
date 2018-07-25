@@ -68,13 +68,14 @@ const getAnswer = (timeZoneID, startYear, startMonth, startDay, totalDays) => {
 
     for (let i = 0; i < totalDays; i++) {
         let url = 'https://api.darksky.net/forecast/' + apiKey + '/' + latitude + ',' + longitude + ',' + currDate.format() + '?units=si';
-        console.log(url);
         downloadPage(url, timeZoneID, totalDays);
         currDate.add(1, 'days');
     }
 }
 
-const setParams = (config) => {
+const setConfig = (config) => {
+    console.log("HI");
+    console.log(config);
     apiKey = config.apiKey;
     latitude = config.latitude;
     longitude = config.longitude;
@@ -102,7 +103,6 @@ const getCsv = (arr) => {
 }
 
 const run = function (config) {
-    setParams(config);
     timezoner.getTimeZone(
         latitude, // Latitude coordinate
         longitude, // Longitude coordinate
@@ -117,4 +117,7 @@ const run = function (config) {
     );
 }
 
-module.exports = run;
+module.exports = {
+    'run': run,
+    'setConfig': setConfig,
+};

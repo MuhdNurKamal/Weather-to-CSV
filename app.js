@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const getAnswer = require('./logic');
+const downloader = require('./weather-downloader.js');
 
 const CONFIG_FILE_NAME = 'config.json';
 
@@ -51,7 +51,8 @@ const run = function() {
     setConfig();
     $('#submit-button').click(function(event) {
         let config = getConfig();
-        getAnswer(config);
+        downloader.setConfig(config);
+        downloader.run();
     });
 }
 
