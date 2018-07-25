@@ -5,9 +5,8 @@ const http = require('https');
 const fs = require('fs');
 const path = require('path');
 const timezoner = require('timezoner');
-const arr = [];
 
-let apiKey, latitude, longitude, startYear, startMonth, startDay, numOfDays;
+let arr, apiKey, latitude, longitude, startYear, startMonth, startDay, numOfDays, dataToDownload;
 
 const downloadPage = (url, timeZoneID, totalDays) => {
     const fetchPage = (urlF, callBack) => {
@@ -27,19 +26,20 @@ const downloadPage = (url, timeZoneID, totalDays) => {
         let date = moment.tz(data["hourly"]["data"][0]["time"] * 1000, timeZoneID).format();
         let hourlyArr = data["hourly"]["data"].map((hourlyData) => {
             let time = moment.tz(hourlyData['time'] * 1000, timeZoneID).format("HH-mm-ss");
-            let temp = hourlyData['temperature'];
-            let humidity = hourlyData['humidity'];
-            return {
-                "time": time,
-                "temp": temp,
-                "humidity": humidity
-            }
+            data = {
+                "time": time
+            };
+            dataToDownload.forEach((current, index, arr) => {
+                data[current] = hourlyData[current];
+            });
+            return data;
         })
         arr.push({
             "date": date,
             "data": hourlyArr
         });
         if (arr.length == totalDays) {
+
             arr.sort((a, b) => {
                 if (a["date"] > b["date"])
                     return 1;
@@ -50,14 +50,16 @@ const downloadPage = (url, timeZoneID, totalDays) => {
             let csvString = getCsv(arr);
             let fileName = timeZoneID.split("/")[1] + "," + startYear + "," + startMonth + "," + startDay + ".csv";
             fs.writeFileSync(path.join(__dirname, fileName), csvString);
-            console.log('Coordinates: ' + latitude + ' N ' + longitude + ' E');
-            console.log('Timezone ID: ' + timeZoneID);
-            console.log('Start Date: ' + arr[0]['date'].split('T')[0]);
-            console.log('End Date: ' + arr[arr.length - 1]['date'].split('T')[0]);
-            console.log('Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day'));
-            console.log('downloading is done, Filename: ' + fileName);
+            let downloadMessage = 
+            'Coordinates: ' + latitude + ' N ' + longitude + ' E' + '\n'
+            + 'Timezone ID: ' + timeZoneID + '\n' 
+            + 'Start Date: ' + arr[0]['date'].split('T')[0] + '\n'
+            + 'End Date: ' + arr[arr.length - 1]['date'].split('T')[0] + '\n'
+            + 'Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day') + '\n'
+            + 'downloading is done, Filename: ' + fileName;
+            console.log(downloadMessage);
         }
-    })
+    });
 };
 
 const getAnswer = (timeZoneID, startYear, startMonth, startDay, totalDays) => {
@@ -74,8 +76,6 @@ const getAnswer = (timeZoneID, startYear, startMonth, startDay, totalDays) => {
 }
 
 const setConfig = (config) => {
-    console.log("HI");
-    console.log(config);
     apiKey = config.apiKey;
     latitude = config.latitude;
     longitude = config.longitude;
@@ -83,10 +83,11 @@ const setConfig = (config) => {
     startMonth = config.startMonth;
     startDay = config.startDay;
     numOfDays = config.numOfDays;
+    dataToDownload = config.dataToDownload;
 }
 
 const getCsv = (arr) => {
-    let csvString = '"date","time","temp","humidity"\n';
+    let csvString = '"date","time' + dataToDownload.reduce((prev, curr) => prev + '","' + curr, '') + '"\n';
     arr.forEach((day, index) => {
         day['data'].forEach((hour, index) => {
             if (index == 0)
@@ -94,15 +95,16 @@ const getCsv = (arr) => {
             else
                 csvString += '"",';
 
-            csvString += '"' + hour['time'] + '",';
-            csvString += '"' + hour['temp'] + '",';
-            csvString += '"' + hour['humidity'] + '"\n';
+            csvString += '"' + hour['time'];
+
+            csvString += dataToDownload.reduce((prev, curr, index) => prev + '","' + hour[curr], '') + '"\n';
         })
     });
     return csvString;
 }
 
 const run = function (config) {
+    arr = [];
     timezoner.getTimeZone(
         latitude, // Latitude coordinate
         longitude, // Longitude coordinate
