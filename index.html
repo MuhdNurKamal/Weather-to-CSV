@@ -4,19 +4,54 @@
 <head>
   <meta charset="UTF-8">
   <title>Hello World!</title>
+  <link rel="stylesheet" type="text/css" href="./stylesheet.css">
 </head>
 
 <body>
   <h1>Weather to CSV</h1>
 
   <div>
-    API-KEY <input id='api-key-config'></input>
+    API-key <input id='api-key-config'></input>
 </div>
 
   <div>
-    Latitude <input id='latitude-config' size=7></input>
+    Latitude  <input id='latitude-config' size=7></input>
     Longitude <input id='longitude-config' size=7></input>
   </div>
+
+  <!-- <div>
+    Summary <input type="checkbox" id='summary-checkbox-config'></input>
+    Precipitation Intensity <input type="checkbox" id='precipIntensity-checkbox-config'></input>
+    Precipitation Probability <input type="checkbox" id='precipProbability-checkbox-config'></input>
+  </div>  -->
+
+  <h2>Tick to include data</h2>
+  <table>
+    <tr>
+      <td>Summary<span><input type="checkbox" id='summary-checkbox-config'></input></span></td>
+      <td>Precipitation Intensity<span><input type="checkbox" id='precipIntensity-checkbox-config'></input></span></td>
+      <td>Precipitation Probability<span><input type="checkbox" id='precipProbability-checkbox-config'></input></span></td>
+    </tr>
+    <tr>
+      <td>Temperature<span><input type="checkbox" id='temperature-checkbox-config'></input></span></td>
+      <td>Apparent Temperature<span><input type="checkbox" id='apparentTemperature-checkbox-config'></input></span></td>
+      <td>Dew Point<span><input type="checkbox" id='dewPoint-checkbox-config'></input></span></td>
+    </tr>
+    <tr>
+      <td>Humidity<span><input type="checkbox" id='humidity-checkbox-config'></input></span></td>
+      <td>Pressure<span><input type="checkbox" id='pressure-checkbox-config'></input></span></td>
+      <td>Wind Speed<span><input type="checkbox" id='windSpeed-checkbox-config'></input></span></td>
+    </tr>
+    <tr>
+      <td>Wind Gust<span><input type="checkbox" id='windGust-checkbox-config'></input></span></td>
+      <td>Wind Bearing<span><input type="checkbox" id='windBearing-checkbox-config'></input></span></td>
+      <td>Cloud Cover<span><input type="checkbox" id='cloudCover-checkbox-config'></input></span></td>
+    </tr>
+    <tr>
+      <td>Visibility<span><input type="checkbox" id='visibility-checkbox-config'></input></span></td>
+    </tr>
+  </table>
+  
 
   <div>
     Day <input id='start-day-config' size=7></input>

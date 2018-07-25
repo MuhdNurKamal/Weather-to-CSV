@@ -68,6 +68,7 @@ const getAnswer = (timeZoneID, startYear, startMonth, startDay, totalDays) => {
 
     for (let i = 0; i < totalDays; i++) {
         let url = 'https://api.darksky.net/forecast/' + apiKey + '/' + latitude + ',' + longitude + ',' + currDate.format() + '?units=si';
+        console.log(url);
         downloadPage(url, timeZoneID, totalDays);
         currDate.add(1, 'days');
     }
