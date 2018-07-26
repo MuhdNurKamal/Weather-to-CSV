@@ -83,7 +83,8 @@ const downloadPage = (url, timeZoneID, totalDays) => {
                 'Start Date: ' + arr[0]['date'].split('T')[0] + '\n' +
                 'End Date: ' + arr[arr.length - 1]['date'].split('T')[0] + '\n' +
                 'Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day') + '\n' +
-                'downloading is done, Filename: ' + fileName;
+                'downloading is done, Filename: ' + fileName +
+                'Download folder: ' + path.join(__dirname, TARGET_DOWNLOAD_LOCATION);
             alert(downloadMessage);
         }
     });
