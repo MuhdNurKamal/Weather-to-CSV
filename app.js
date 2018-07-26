@@ -64,9 +64,13 @@ const run = function () {
 
     $('#submit-button').click(function (event) {
         let config = getConfig();
-        console.log("Hello there");
         downloader.setConfig(config);
         downloader.run();
+    });
+
+    $('#clear-logs-button').click(function (event) {
+        console.log(this);
+        $('ol').empty();
     });
 
     window.addEventListener('beforeunload', function () {

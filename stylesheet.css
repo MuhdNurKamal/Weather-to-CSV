@@ -1,6 +1,6 @@
 span {
- font-weight: 800;
- float: right;
+    font-weight: 800;
+    float: right;
 }
 
 h1 {
@@ -10,4 +10,15 @@ h1 {
 
 h2 {
     margin-bottom: 0%;
+}
+
+nav {
+    height: 100px;
+    background-color: gray;
+    overflow-y: scroll;
+}
+
+nav ul {
+    height: 200px;
+    width: 18%;
 }

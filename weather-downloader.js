@@ -44,7 +44,12 @@ const downloadPage = (url, timeZoneID, totalDays) => {
 
     fetchPage(url, (error, data) => {
         if (error) return console.log(error);
-        data = JSON.parse(data);
+        try {
+            data = JSON.parse(data);
+        } catch(err) {
+            $('ol').append("<li>" + err + "</li>");
+            return;
+        }
         let date = moment.tz(data["hourly"]["data"][0]["time"] * 1000, timeZoneID).format();
         let hourlyArr = data["hourly"]["data"].map((hourlyData) => {
             let time = moment.tz(hourlyData['time'] * 1000, timeZoneID).format("HH-mm-ss");
@@ -71,7 +76,7 @@ const downloadPage = (url, timeZoneID, totalDays) => {
             });
             let csvString = getCsv(arr);
             let fileName = timeZoneID.split("/")[1] + "," + startYear + "," + startMonth + "," + startDay + ".csv";
-            fs.writeFileSync(path.join(__dirname, TARGET_DOWNLOAD_LOCATION,fileName), csvString);
+            fs.writeFileSync(path.join(__dirname, TARGET_DOWNLOAD_LOCATION, fileName), csvString);
             let downloadMessage =
                 'Coordinates: ' + latitude + ' N ' + longitude + ' E' + '\n' +
                 'Timezone ID: ' + timeZoneID + '\n' +
@@ -79,7 +84,7 @@ const downloadPage = (url, timeZoneID, totalDays) => {
                 'End Date: ' + arr[arr.length - 1]['date'].split('T')[0] + '\n' +
                 'Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day') + '\n' +
                 'downloading is done, Filename: ' + fileName;
-            console.log(downloadMessage);
+            alert(downloadMessage);
         }
     });
 };
