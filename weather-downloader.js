@@ -26,7 +26,7 @@ const columnDict = {
     "windBearing": "Wind Bearing",
     "cloudCover": "Cloud Cover",
     "visibility": "Visibility"
-}
+};
 
 let arr, apiKey, latitude, longitude, startYear, startMonth, startDay, numOfDays, dataToDownload;
 
@@ -40,15 +40,14 @@ const downloadPage = (url, timeZoneID, totalDays) => {
             console.error(`Got error: ${error.message}`);
             callback(error);
         })
-    }
+    };
 
     fetchPage(url, (error, data) => {
         if (error) return console.log(error);
         try {
             data = JSON.parse(data);
-        } catch(err) {
-            $('ol').append("<li>" + err + "</li>");
-            return;
+        } catch (err) {
+            return addToLogs(err);
         }
         let date = moment.tz(data["hourly"]["data"][0]["time"] * 1000, timeZoneID).format();
         let hourlyArr = data["hourly"]["data"].map((hourlyData) => {
@@ -85,6 +84,7 @@ const downloadPage = (url, timeZoneID, totalDays) => {
                 'Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day') + '\n' +
                 'downloading is done, Filename: ' + fileName +
                 'Download folder: ' + path.join(__dirname, TARGET_DOWNLOAD_LOCATION);
+            addToLogs(downloadMessage);
             alert(downloadMessage);
         }
     });
@@ -102,7 +102,11 @@ const getAnswer = (timeZoneID, startYear, startMonth, startDay, totalDays) => {
         downloadPage(url, timeZoneID, totalDays);
         currDate.add(1, 'days');
     }
-}
+};
+
+const addToLogs = function (message) {
+    $('ol').append("<li>" + message + "</li>");
+};
 
 const setConfig = (config) => {
     apiKey = config.apiKey;
@@ -113,7 +117,7 @@ const setConfig = (config) => {
     startDay = config.startDay;
     numOfDays = config.numOfDays;
     dataToDownload = config.dataToDownload;
-}
+};
 
 const getCsv = (arr) => {
     let csvString = '"' + COLUMN_NAME_DATE + '","' + COLUMN_NAME_TIME + dataToDownload.reduce((prev, curr) => prev + '","' + columnDict[(curr)], '') + '"\n';
@@ -130,7 +134,7 @@ const getCsv = (arr) => {
         })
     });
     return csvString;
-}
+};
 
 const run = function (config) {
     arr = [];
@@ -146,7 +150,7 @@ const run = function (config) {
             }
         }
     );
-}
+};
 
 module.exports = {
     'run': run,
