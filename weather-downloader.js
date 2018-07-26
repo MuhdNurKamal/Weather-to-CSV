@@ -5,6 +5,7 @@ const http = require('https');
 const fs = require('fs');
 const path = require('path');
 const timezoner = require('timezoner');
+const TARGET_DOWNLOAD_LOCATION = 'files';
 
 const COLUMN_NAME_DATE = "Date";
 const COLUMN_NAME_TIME = "Time";
@@ -70,7 +71,7 @@ const downloadPage = (url, timeZoneID, totalDays) => {
             });
             let csvString = getCsv(arr);
             let fileName = timeZoneID.split("/")[1] + "," + startYear + "," + startMonth + "," + startDay + ".csv";
-            fs.writeFileSync(path.join(__dirname, fileName), csvString);
+            fs.writeFileSync(path.join(__dirname, TARGET_DOWNLOAD_LOCATION,fileName), csvString);
             let downloadMessage =
                 'Coordinates: ' + latitude + ' N ' + longitude + ' E' + '\n' +
                 'Timezone ID: ' + timeZoneID + '\n' +
