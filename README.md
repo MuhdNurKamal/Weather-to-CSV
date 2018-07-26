@@ -1,2 +1,2 @@
 # Weather-to-CSV
-Get Weather data in CSV format
+Get Weather data in CSV format using Dark Sky API
