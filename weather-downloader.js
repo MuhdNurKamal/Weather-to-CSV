@@ -6,6 +6,27 @@ const fs = require('fs');
 const path = require('path');
 const timezoner = require('timezoner');
 
+const COLUMN_NAME_DATE = "Date";
+const COLUMN_NAME_TIME = "Time";
+const columnDict = {
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "summary": "Summary",
+    "precipIntensity": "Precipitation Intensity / mm/h",
+    "precipProbability": "Precipitation Probability",
+    "temperature": "Temperature / Celcius",
+    "apparentTemperature": "Apparent Temperature / Celcius",
+    "dewPoint": "Dew Point / Celcius",
+    "humidity": "Humidity",
+    "pressure": "Pressure / hPa",
+    "pressureError": "Pressure Error",
+    "windSpeed": "Wind Speed / m/s",
+    "windGust": "Wind Gust / m/s",
+    "windBearing": "Wind Bearing",
+    "cloudCover": "Cloud Cover",
+    "visibility": "Visibility"
+}
+
 let arr, apiKey, latitude, longitude, startYear, startMonth, startDay, numOfDays, dataToDownload;
 
 const downloadPage = (url, timeZoneID, totalDays) => {
@@ -50,13 +71,13 @@ const downloadPage = (url, timeZoneID, totalDays) => {
             let csvString = getCsv(arr);
             let fileName = timeZoneID.split("/")[1] + "," + startYear + "," + startMonth + "," + startDay + ".csv";
             fs.writeFileSync(path.join(__dirname, fileName), csvString);
-            let downloadMessage = 
-            'Coordinates: ' + latitude + ' N ' + longitude + ' E' + '\n'
-            + 'Timezone ID: ' + timeZoneID + '\n' 
-            + 'Start Date: ' + arr[0]['date'].split('T')[0] + '\n'
-            + 'End Date: ' + arr[arr.length - 1]['date'].split('T')[0] + '\n'
-            + 'Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day') + '\n'
-            + 'downloading is done, Filename: ' + fileName;
+            let downloadMessage =
+                'Coordinates: ' + latitude + ' N ' + longitude + ' E' + '\n' +
+                'Timezone ID: ' + timeZoneID + '\n' +
+                'Start Date: ' + arr[0]['date'].split('T')[0] + '\n' +
+                'End Date: ' + arr[arr.length - 1]['date'].split('T')[0] + '\n' +
+                'Total ' + totalDays + ((totalDays > 1) ? ' days' : ' day') + '\n' +
+                'downloading is done, Filename: ' + fileName;
             console.log(downloadMessage);
         }
     });
@@ -70,6 +91,7 @@ const getAnswer = (timeZoneID, startYear, startMonth, startDay, totalDays) => {
 
     for (let i = 0; i < totalDays; i++) {
         let url = 'https://api.darksky.net/forecast/' + apiKey + '/' + latitude + ',' + longitude + ',' + currDate.format() + '?units=si';
+        console.log(url);
         downloadPage(url, timeZoneID, totalDays);
         currDate.add(1, 'days');
     }
@@ -87,7 +109,7 @@ const setConfig = (config) => {
 }
 
 const getCsv = (arr) => {
-    let csvString = '"date","time' + dataToDownload.reduce((prev, curr) => prev + '","' + curr, '') + '"\n';
+    let csvString = '"' + COLUMN_NAME_DATE + '","' + COLUMN_NAME_TIME + dataToDownload.reduce((prev, curr) => prev + '","' + columnDict[(curr)], '') + '"\n';
     arr.forEach((day, index) => {
         day['data'].forEach((hour, index) => {
             if (index == 0)
