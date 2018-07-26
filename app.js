@@ -23,12 +23,19 @@ const run = function () {
             $('#start-month-config').val(config['startMonth']);
             $('#start-year-config').val(config['startYear']);
             $('#number-of-days-config').val(config['numOfDays']);
+
+            $(':checkBox').each(function (index, checkbox) {
+                if (config.dataToDownload.includes(checkbox.id.substring(0, checkbox.id.indexOf('-')))) {
+                    checkbox.checked = true;
+                }
+            });
         }
     }
 
     // TODO
     const saveConfig = function () {
-
+        let config = getConfig();
+        fs.writeFileSync(path.join(__dirname, CONFIG_FILE_NAME), JSON.stringify(config));
     }
 
     const getConfig = function () {
@@ -47,25 +54,27 @@ const run = function () {
 
     const getDataToDownload = function () {
         const dataToDownload = [];
-        $(':checkBox').each(function (index, element) {
-            if (element.checked) {
-                dataToDownload.push(element.id.substring(0, element.id.indexOf('-'))); 
+        $(':checkBox').each(function (index, checkbox) {
+            if (checkbox.checked) {
+                dataToDownload.push(checkbox.id.substring(0, checkbox.id.indexOf('-')));
             }
         });
         return dataToDownload;
     }
 
-    const saveToCsv = function (config) {
-
-    }
-
-    setConfig();
     $('#submit-button').click(function (event) {
         let config = getConfig();
         console.log("Hello there");
         downloader.setConfig(config);
         downloader.run();
     });
+
+    window.addEventListener('beforeunload', function () {
+        saveConfig();
+    })
+
+    // Load settings from config file
+    setConfig();
 }
 
 $(run);
