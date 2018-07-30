@@ -45,9 +45,10 @@ const downloadPage = (url, timeZoneID, totalDays) => {
     fetchPage(url, (error, data) => {
         if (error) return console.log(error);
         try {
+            console.log(data);
             data = JSON.parse(data);
         } catch (err) {
-            return addToLogs(err);
+            return addToLogs(data + "(Check your Dark Sky API key)");
         }
         let date = moment.tz(data["hourly"]["data"][0]["time"] * 1000, timeZoneID).format();
         let hourlyArr = data["hourly"]["data"].map((hourlyData) => {
