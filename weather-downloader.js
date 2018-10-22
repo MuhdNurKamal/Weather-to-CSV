@@ -4,7 +4,7 @@ const moment = require('moment-timezone');
 const http = require('https');
 const fs = require('fs');
 const path = require('path');
-const timezoner = require('timezoner');
+const geoTZ = require('geo-tz');
 const TARGET_DOWNLOAD_LOCATION = 'files';
 
 const COLUMN_NAME_DATE = "Date";
@@ -139,18 +139,8 @@ const getCsv = (arr) => {
 
 const run = function (config) {
     arr = [];
-    timezoner.getTimeZone(
-        latitude, // Latitude coordinate
-        longitude, // Longitude coordinate
-        function (err, data) {
-            if (err) {
-                console.log(err);
-            } else {
-                //timeZone, year, month, day, noOfDays
-                getAnswer(data['timeZoneId'], startYear, startMonth, startDay, numOfDays);
-            }
-        }
-    );
+    let timeZoneId = geoTZ(latitude, longitude);
+    getAnswer(timeZoneId, startYear, startMonth, startDay, numOfDays);
 };
 
 module.exports = {
