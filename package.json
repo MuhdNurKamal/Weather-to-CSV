@@ -15,6 +15,6 @@
     "timezoner": "0.2.0"
   },
   "devDependencies": {
-    "electron": "2.0.5"
+    "electron": "2.0.8"
   }
 }
