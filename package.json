@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "geo-tz": "^4.0.2",
-    "jquery": "3.3.1",
+    "jquery": "3.4.0",
     "moment-timezone": "0.5.21"
   },
   "devDependencies": {
