@@ -12,7 +12,7 @@
   "dependencies": {
     "geo-tz": "^4.0.2",
     "jquery": "^3.5.0",
-    "moment-timezone": "0.5.21"
+    "moment-timezone": "0.5.35"
   },
   "devDependencies": {
     "electron": "7.2.4"
